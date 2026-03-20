@@ -27,7 +27,7 @@ JavaScript (ES6): Array manipulation, event listeners, and DOM management.
 Clone the repository:
 
 Bash
-git clone https://github.com/YourUsername/Quiz-Game.git
+git clone https://github.com/The-Z-DataSculptor/Quiz-Game-JS
 Open index.html in any modern web browser.
 
 Start testing your knowledge!
