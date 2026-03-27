@@ -1,0 +1,335 @@
+/* ============================================================
+   1. VARIABLES & THEME
+   These are the "Master Settings" for your colors and fonts.
+   ============================================================ */
+:root {
+  --primary-color: #667eea; /* Main Purple/Blue */
+  --secondary-color: #764ba2; /* Darker Purple */
+  --bg-color: #f4f7f6; /* Light Grey background */
+  --text-color: #2d3436; /* Dark charcoal for readability */
+  --white: #ffffff;
+  --transition: all 0.3s ease-in-out;
+
+  /* Modern Sans-Serif Font Stack: Uses the best font available on the device */
+  --font-main:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+/* ============================================================
+   2. MODERN RESET
+   Removes default browser spacing so our design is consistent.
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* Padding won't increase element width */
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   3. BODY (THE BACKDROP)
+   Centers the quiz and sets the overall background.
+   ============================================================ */
+body {
+  font-family: var(--font-main);
+  /* Creates a beautiful diagonal color blend */
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+  color: var(--text-color);
+  line-height: 1.6;
+  /* Flexbox logic to keep the quiz perfectly centered on any screen */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased; /* Makes text look sharper */
+}
+
+/* ============================================================
+   4. THE CONTAINER (THE CARD)
+   The white box that holds all quiz content.
+   ============================================================ */
+.container {
+  width: 90%;
+  max-width: 500px;
+  padding: 2.5rem;
+  background-color: var(--white);
+  border-radius: 20px; /* Rounded corners */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); /* Floating effect */
+  text-align: center;
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border for definition */
+}
+
+.author-credit {
+  position: absolute; /* Takes it out of the container layout */
+  top: 30px; /* Distance from the very top of the screen */
+  left: 0;
+  right: 0; /* Left and Right 0 + text-align center = perfect middle */
+
+  font-size: 24px; /* Larger size */
+  font-weight: 900; /* Extra bold / "black" weight */
+  color: #ffffff; /* White text for the purple background */
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Makes it pop */
+  z-index: 10; /* Ensures it stays on top of everything */
+}
+
+/* ============================================================
+   5. SCREEN SWITCHING LOGIC
+   Controls which part of the quiz is visible.
+   ============================================================ */
+.screen {
+  display: none; /* All screens (Start, Quiz, Result) are hidden by default */
+  animation: fadeIn 0.5s ease; /* Smooth entry animation */
+}
+
+.screen.active {
+  display: block; /* Only the screen with the 'active' class will show */
+}
+
+/* Animation: Slides the screen up slightly while fading in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   6. TYPOGRAPHY (TEXT STYLES)
+   ============================================================ */
+
+/* Main titles like "Quiz Time!" */
+h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+}
+
+/* The actual Question text */
+h2#question-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.3;
+  margin-bottom: 1.2rem;
+}
+
+/* Subtitles and descriptions */
+p {
+  font-size: 1rem;
+  color: #636e72;
+  margin-bottom: 1rem;
+}
+
+/* Small labels like "Question 1 of 5" */
+.quiz-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.quiz-info p {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: #b2bec3;
+}
+
+/* Highlighted numbers (Score/Question count) */
+#current-question,
+#score,
+#final-score {
+  color: var(--secondary-color);
+  font-variant-numeric: tabular-nums; /* Stops numbers from "jumping" */
+}
+
+/* ============================================================
+   7. PROGRESS BAR
+   ============================================================ */
+
+/* The grey track */
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: #dfe6e9;
+  border-radius: 50px;
+  margin-top: 2rem;
+  overflow: hidden; /* Keeps the inner fill inside the rounded corners */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* The colorful moving fill */
+#progress {
+  height: 100%;
+  width: 0%; /* Changed by JavaScript */
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  border-radius: 50px;
+  /* Smooth "bouncy" movement */
+  transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ============================================================
+   8. ANSWER BUTTONS (THE CHOICES)
+   ============================================================ */
+
+.answer-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.answer-btn {
+  background-color: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 15px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+/* Effect when you hover over a choice */
+.answer-btn:hover {
+  background-color: #f0f3ff;
+  border-color: var(--primary-color);
+  transform: translateX(5px);
+}
+
+/* Effect when you click a choice */
+.answer-btn:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================
+   9. FEEDBACK & ACTION BUTTONS
+   ============================================================ */
+
+/* Green background for correct answer */
+.correct {
+  background-color: #2ecc71 !important;
+  color: white !important;
+  border-color: #27ae60 !important;
+}
+
+/* Red background for wrong answer */
+.wrong {
+  background-color: #ff7675 !important;
+  color: white !important;
+  border-color: #d63031 !important;
+}
+
+/* Prevent clicking after an answer is chosen */
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Big Start/Restart Buttons */
+#start-btn,
+#restart-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+  transition: var(--transition);
+}
+
+#start-btn:hover,
+#restart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+}
+
+/* ============================================================
+   10. RESULT SCREEN POLISH
+   ============================================================ */
+
+.result-info {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 2px dashed #dcdde1;
+  margin: 1.5rem 0;
+}
+
+/* Final Score Animation */
+@keyframes scorePop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+#final-score {
+  font-size: 2rem;
+  font-weight: 800;
+  display: inline-block;
+  animation: scorePop 0.5s ease-out;
+}
+
+/* ============================================================
+   11. MOBILE RESPONSIVENESS
+   Shrinks text for small phone screens.
+   ============================================================ */
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .answer-btn {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+}
